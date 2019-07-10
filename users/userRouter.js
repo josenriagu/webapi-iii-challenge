@@ -2,6 +2,7 @@
 const express = require('express');
 // import database helper
 const Users = require('./userDb');
+const Posts = require('../posts/postDb');
 // define router
 const router = express.Router();
 
@@ -14,8 +15,13 @@ router.post('/', validateUser, async (req, res) => {
    }
 });
 
-router.post('/:id/posts', (req, res) => {
-
+router.post('/:id/posts', validateUserId, validatePost, async (req, res) => {
+   try {
+      const post = await Posts.insert({ ...req.body, postedBy: req.user.name })
+      res.status(200).json(post)
+   } catch (error) {
+      res.status(500).json({ message: 'Oops, something went wrong' })
+   }
 });
 
 router.get('/', async (req, res) => {
@@ -44,11 +50,17 @@ router.get('/:id/posts', validateUserId, async (req, res) => {
    }
 });
 
-router.delete('/:id', (req, res) => {
-
+router.delete('/:id', validateUserId, async (req, res) => {
+   try {
+      await Users.remove(req.params.id);
+      const users = await Users.get();
+      res.status(200).json({ success: true, users })
+   } catch (error) {
+      res.status(500).json({ message: 'Oops, something went wrong' });
+   }
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', validateUserId, async (req, res) => {
 
 });
 
@@ -84,7 +96,15 @@ function validateUser(req, res, next) {
 };
 
 function validatePost(req, res, next) {
-
+   if (Object.keys(req.body).length !== 0 && req.body.constructor === Object) {
+      if (req.body.text) {
+         next();
+      } else {
+         res.status(400).json({ message: "missing required text field" })
+      }
+   } else {
+      res.status(400).json({ message: "missing post data" })
+   }
 };
 
 module.exports = router;
