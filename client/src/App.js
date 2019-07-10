@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Users from './components/Users';
+import { Route, Link } from 'react-router-dom';
+import UsersList from './components/UsersList';
+import User from './components/User';
 import './App.css';
 
 const baseUsersUrl = 'http://localhost:5000/api/users';
-const basePostsUrl = 'http://localhost:5000/api/posts';
 
 export default class App extends Component {
   state = {
     users: [],
-    posts: []
   }
 
   fetchUsers = () => {
@@ -25,22 +25,6 @@ export default class App extends Component {
       .catch(err => {
         console.log(err)
       })
-    axios.get(basePostsUrl)
-      .then(res => {
-        this.setState(state => {
-          return {
-            ...state,
-            posts: res.data.posts
-          }
-        })
-        
-      })
-      .catch(err => {
-        console.log(err)
-      })
-      .finally(() => {
-        console.log(this.state)
-      })
   }
 
   componentDidMount() {
@@ -50,9 +34,16 @@ export default class App extends Component {
   render() {
     return (
       <div className="app">
-        {
-          this.state.users.map(user => <Users key={user.id} user={user} />)
-        }
+        <Link to="/"><button>Home</button></Link>
+        <Route
+          exact          
+          path="/"
+          render={props => <UsersList {...props} users={this.state.users} /> }
+        />
+        <Route
+          path="/users/:id"
+          render={props => <User {...props} posts={this.state.posts} />}
+        />
       </div>
     );
   }

@@ -1,26 +1,57 @@
+a {
+  font-size: 3rem;
+  text-decoration: none;
+  color: white;
+}
+
+button {
+  cursor: pointer;
+  margin-bottom: 1rem;
+  padding: .5rem 1.5rem;
+  background-color: inherit;
+  color: inherit;
+  border: .1rem solid gray;
+  border-radius: .5rem;
+  outline: none;
+  transition: transform .5s linear;
+}
+button:hover {
+  transform: scale(1.05)
+}
+
 .app {
-  display: flex;
-  flex-wrap: wrap;
-  width: 80%;
-  margin: 2rem auto;
+  width: 60%;
+  margin: 1.5rem auto;
   text-align: center;
 }
 
-.user {
+.list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.user,
+.post {
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: calc(25% - 3rem);
-  height: 20rem;
-  font-size: 3rem;
   margin: 1.5rem;
-  border-radius: 50%;
   box-shadow: 0 0 1rem 0.1rem rgba(255, 255, 255, 1);
-  cursor: pointer;
 }
 
+.user {
+  height: 20rem;
+  border-radius: 50%;
+}
+
+.post {
+  font-size: 3rem;
+  padding: 0.5rem;
+  cursor: grab;
+}
 .user:hover {
-  animation: box-shadow-alive .5s infinite linear;
+  animation: box-shadow-alive 1s infinite linear;
 }
 
 @keyframes box-shadow-alive {
