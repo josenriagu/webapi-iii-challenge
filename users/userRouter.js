@@ -17,8 +17,9 @@ router.post('/', validateUser, async (req, res) => {
 
 router.post('/:id/posts', validateUserId, validatePost, async (req, res) => {
    try {
-      const post = await Posts.insert({ ...req.body, postedBy: req.user.name })
-      res.status(200).json(post)
+      await Posts.insert({ text: req.body.text, user_id: req.user.id })
+      const posts = await Users.getUserPosts(req.user.id);
+      res.status(200).json({ success: true, posts })
    } catch (error) {
       res.status(500).json({ message: 'Oops, something went wrong' })
    }
