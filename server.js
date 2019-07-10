@@ -1,5 +1,7 @@
 // import express module
 const express = require('express');
+// import cors module
+const cors = require('cors');
 // import routers
 const userRouter = require('./users/userRouter');
 const postRouter = require('./posts/postRouter');
@@ -10,6 +12,8 @@ const server = express();
 // tell server what to use, including middlewares for this level
 // express json
 server.use(express.json());
+// cors to take care of cross-origin requests
+server.use(cors())
 // custom middleware - logger;
 server.use(logger);
 // base endpoints
