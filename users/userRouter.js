@@ -60,8 +60,14 @@ router.delete('/:id', validateUserId, async (req, res) => {
    }
 });
 
-router.put('/:id', validateUserId, async (req, res) => {
-
+router.put('/:id', validateUserId, validateUser, async (req, res) => {
+   try {
+      await Users.update(req.user.id, req.body)
+      const users = await Users.get();
+      res.status(200).json({ success: true, users })
+   } catch (error) {
+      res.status(500).json({ message: 'Oops, something went wrong' });
+   }
 });
 
 //custom middleware
