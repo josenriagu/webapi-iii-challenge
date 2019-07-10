@@ -1,26 +1,59 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import axios from 'axios';
+import Users from './components/Users';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const baseUsersUrl = 'http://localhost:5000/api/users';
+const basePostsUrl = 'http://localhost:5000/api/posts';
 
-export default App;
+export default class App extends Component {
+  state = {
+    users: [],
+    posts: []
+  }
+
+  fetchUsers = () => {
+    axios.get(baseUsersUrl)
+      .then(res => {
+        this.setState(state => {
+          return {
+            ...state,
+            users: res.data.users
+          }
+        })
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    axios.get(basePostsUrl)
+      .then(res => {
+        this.setState(state => {
+          return {
+            ...state,
+            posts: res.data.posts
+          }
+        })
+        
+      })
+      .catch(err => {
+        console.log(err)
+      })
+      .finally(() => {
+        console.log(this.state)
+      })
+  }
+
+  componentDidMount() {
+    this.fetchUsers();
+  }
+
+  render() {
+    return (
+      <div className="app">
+        {
+          this.state.users.map(user => <Users key={user.id} user={user} />)
+        }
+      </div>
+    );
+  }
+}
