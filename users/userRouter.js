@@ -18,13 +18,13 @@ router.post('/:id/posts', (req, res) => {
 router.get('/', async (req, res) => {
    try {
       const users = await Users.get();
-      res.status(200).json({success: true, users})
+      res.status(200).json({ success: true, users })
    } catch (error) {
-      res.status(500).json({message: 'Oops, something went wrong'})
+      res.status(500).json({ message: 'Oops, something went wrong' })
    }
 });
 
-router.get('/:id',validateUserId, (req, res) => {
+router.get('/:id', validateUserId, (req, res) => {
    try {
       res.status(200).json(req.user);
    } catch (error) {
@@ -32,8 +32,13 @@ router.get('/:id',validateUserId, (req, res) => {
    }
 });
 
-router.get('/:id/posts', (req, res) => {
-
+router.get('/:id/posts', validateUserId, async (req, res) => {
+   try {
+      const posts = await Users.getUserPosts(req.user.id);
+      res.status(200).json({ success: true, posts })
+   } catch (error) {
+      res.status(500).json({ message: 'Oops, something went wrong' });
+   }
 });
 
 router.delete('/:id', (req, res) => {
