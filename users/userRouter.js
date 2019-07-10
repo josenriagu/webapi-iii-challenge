@@ -4,11 +4,14 @@ const express = require('express');
 const Users = require('./userDb');
 // define router
 const router = express.Router();
-// tell router what to use
-// router.use(validateUserId);
 
-router.post('/', (req, res) => {
-
+router.post('/', validateUser, async (req, res) => {
+   try {
+      const user = await Users.insert(req.body)
+      res.status(200).json(user)
+   } catch (error) {
+      res.status(500).json({ message: 'Oops, something went wrong' })
+   }
 });
 
 router.post('/:id/posts', (req, res) => {
@@ -69,7 +72,15 @@ async function validateUserId(req, res, next) {
 };
 
 function validateUser(req, res, next) {
-
+   if (Object.keys(req.body).length !== 0 && req.body.constructor === Object) {
+      if (req.body.name) {
+         next();
+      } else {
+         res.status(400).json({ message: "missing required name field" })
+      }
+   } else {
+      res.status(400).json({ message: "missing user data" })
+   }
 };
 
 function validatePost(req, res, next) {
