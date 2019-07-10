@@ -1,9 +1,20 @@
+// import express module
 const express = require('express');
+// import routers
+const userRouter = require('./users/userRouter');
+const postRouter = require('./posts/postRouter');
 
+// define server
 const server = express();
 
+// tell server what to use, including middlewares for this level
+// express json
 server.use(express.json());
+// custom middleware - logger;
 server.use(logger);
+// base endpoints
+server.use('/api/users', userRouter);
+server.use('/api/posts', postRouter);
 
 server.get('/', (req, res) => {
   res.send(`<h2>Let's write some middleware!</h2>`)
