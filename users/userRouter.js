@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/', validateUser, async (req, res) => {
    try {
       const user = await Users.insert(req.body)
-      res.status(200).json(user)
+      res.status(201).json(user)
    } catch (error) {
       res.status(500).json({ message: 'Oops, something went wrong' })
    }
@@ -19,7 +19,7 @@ router.post('/:id/posts', validateUserId, validatePost, async (req, res) => {
    try {
       await Posts.insert({ text: req.body.text, user_id: req.user.id })
       const posts = await Users.getUserPosts(req.user.id);
-      res.status(200).json({ success: true, posts })
+      res.status(201).json({ success: true, posts })
    } catch (error) {
       res.status(500).json({ message: 'Oops, something went wrong' })
    }
@@ -83,7 +83,7 @@ async function validateUserId(req, res, next) {
          req.user = user;
          next();
       } else {
-         res.status(404).json({ message: 'user with that id has gone to Mars!' });
+         res.status(404).json({ message: 'the user with that id has gone to Mars!' });
       }
    } else {
       res.set('X-Nasty', 'Nasty ID').status(400).json({ message: "that does not look like an id!!" });
