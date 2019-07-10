@@ -32,8 +32,14 @@ router.delete('/:id', validatePostId, async (req, res) => {
    }
 });
 
-router.put('/:id', (req, res) => {
-
+router.put('/:id', validatePostId, validatePost, async (req, res) => {
+   try {
+      await Posts.update(req.post.id, req.body)
+      const posts = await Posts.get();
+      res.status(200).json({ success: true, posts })
+   } catch (error) {
+      res.status(500).json({ message: 'Oops, something went wrong' })
+   }
 });
 
 // custom middleware
@@ -52,6 +58,18 @@ async function validatePostId(req, res, next) {
       }
    } else {
       res.set('X-Nasty', 'Nasty ID').status(400).json({ message: "that does not look like an id!!" });
+   }
+};
+
+function validatePost(req, res, next) {
+   if (Object.keys(req.body).length !== 0 && req.body.constructor === Object) {
+      if (req.body.text) {
+         next();
+      } else {
+         res.status(400).json({ message: "missing required text field" })
+      }
+   } else {
+      res.status(400).json({ message: "missing post data" })
    }
 };
 
