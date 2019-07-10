@@ -22,8 +22,14 @@ router.get('/:id', validatePostId, (req, res) => {
    }
 });
 
-router.delete('/:id', (req, res) => {
-
+router.delete('/:id', validatePostId, async (req, res) => {
+   try {
+      await Posts.remove(req.params.id);
+      const posts = await Posts.get();
+      res.status(200).json({ success: true, posts })
+   } catch (error) {
+      res.status(500).json({ message: 'Oops, something went wrong' })
+   }
 });
 
 router.put('/:id', (req, res) => {
