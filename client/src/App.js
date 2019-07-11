@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import axios from './axios';
 import { Route, Link } from 'react-router-dom';
 import UsersList from './components/UsersList';
 import User from './components/User';
 import './App.css';
-
-const baseUsersUrl = 'https://lord-of-the-rings.herokuapp.com/api/users';
 
 export default class App extends Component {
   state = {
@@ -13,7 +11,7 @@ export default class App extends Component {
   }
 
   fetchUsers = () => {
-    axios.get(baseUsersUrl)
+    axios.get('/users')
       .then(res => {
         this.setState(state => {
           return {

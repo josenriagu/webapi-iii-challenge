@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-
-const baseUsersUrl = 'https://lord-of-the-rings.herokuapp.com/api/users';
+import axios from '../axios';
 
 export default class User extends Component {
    constructor(props) {
@@ -13,7 +11,7 @@ export default class User extends Component {
 
    fetchUserPosts = () => {
       const id = this.props.match.params.id;
-      axios.get(`${baseUsersUrl}/${id}/posts`)
+      axios.get(`/users/${id}/posts`)
          .then(res => {
             this.setState(state => {
                return {
