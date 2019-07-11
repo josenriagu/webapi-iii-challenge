@@ -5,7 +5,7 @@ import UsersList from './components/UsersList';
 import User from './components/User';
 import './App.css';
 
-const baseUsersUrl = 'http://localhost:5000/api/users';
+const baseUsersUrl = 'https://lord-of-the-rings.herokuapp.com/api/users';
 
 export default class App extends Component {
   state = {

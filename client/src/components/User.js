@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-const baseUsersUrl = 'http://localhost:5000/api/users';
+const baseUsersUrl = 'https://lord-of-the-rings.herokuapp.com/api/users';
 
 export default class User extends Component {
    constructor(props) {
